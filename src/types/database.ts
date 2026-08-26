@@ -20,6 +20,7 @@ export type Schedule = {
   start_time: string | null;
   end_time: string | null;
   owner_id: string | null;
+  schedule_type_id: string | null;
   place: string | null;
   memo: string | null;
   status: 'planned' | 'done' | 'cancelled';
@@ -31,4 +32,13 @@ export type MasterDefinition = {
   name: string;
   code: string | null;
   description: string | null;
+};
+
+export type MasterItem = {
+  id: string;
+  master_definition_id: string;
+  name: string;
+  value: string | null;
+  sort_order: number;
+  active: boolean;
 };

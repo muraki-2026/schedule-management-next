@@ -12,7 +12,9 @@ button, input, select, textarea { font: inherit; }
 .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
 .day { min-height: 104px; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: .45rem; background: white; }
 .day:nth-child(7n) { border-right: 0; }
-.event { margin-top: .3rem; border-left: 4px solid #2563eb; background: #dbeafe; border-radius: 8px; padding: .25rem .35rem; font-size: .75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.day.saturday { background: #eff6ff; }
+.day.sunday { background: #fff1f2; }
+.event { display: block; margin-top: .3rem; border-left: 4px solid #2563eb; background: #dbeafe; border-radius: 8px; padding: .25rem .35rem; font-size: .75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #111827; }
 .event.done { border-left-color: #16a34a; background: #dcfce7; }
 .event.cancelled { border-left-color: #dc2626; background: #fee2e2; }
 @media (max-width: 760px) { .day { min-height: 78px; font-size: .8rem; } .event { font-size: .65rem; } }
