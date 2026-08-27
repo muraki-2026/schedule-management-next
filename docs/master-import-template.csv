@@ -1,0 +1,4 @@
+マスタコード,マスタ名,項目名,色,並び順,有効
+schedule_type,予定区分,会議,#dbeafe,10,true
+location_type,場所,会議室A,#f3f4f6,10,true
+assignee,担当者,田中,#f3f4f6,10,true
