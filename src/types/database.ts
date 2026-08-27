@@ -22,7 +22,10 @@ export type Schedule = {
   owner_id: string | null;
   assignee_id: string | null;
   schedule_type_id: string | null;
+  schedule_type_text: string | null;
+  assignee_text: string | null;
   place: string | null;
+  place_text: string | null;
   memo: string | null;
   status: 'planned' | 'done' | 'cancelled';
   created_by: string | null;
