@@ -51,7 +51,7 @@ export default function Home() {
   const scheduleTypes = items.filter((i) => i.master_definition_id === scheduleTypeDef?.id && i.active).sort((a, b) => a.sort_order - b.sort_order);
   const locationTypeDef = masters.find((m) => m.code === 'location_type');
   const locationTypes = items.filter((i) => i.master_definition_id === locationTypeDef?.id && i.active).sort((a, b) => a.sort_order - b.sort_order);
-  const assigneeDef = masters.find((m) => ['assignee','person_in_charge','staff','tantosha'].includes(m.code ?? '') || m.name === '担当者' || m.name === '担当者マスタ');
+  const assigneeDef = masters.find((m) => m.code === 'assignee') ?? masters.find((m) => m.name === '担当者') ?? masters.find((m) => m.name === '担当者マスタ') ?? masters.find((m) => ['person_in_charge','staff','tantosha'].includes(m.code ?? ''));
   const assignees = items.filter((i) => i.master_definition_id === assigneeDef?.id && i.active).sort((a, b) => a.sort_order - b.sort_order);
   const filteredSchedules = useMemo(() => {
     const q = query.trim().toLowerCase();
