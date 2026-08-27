@@ -20,6 +20,7 @@ export type Schedule = {
   start_time: string | null;
   end_time: string | null;
   owner_id: string | null;
+  assignee_id: string | null;
   schedule_type_id: string | null;
   place: string | null;
   memo: string | null;
