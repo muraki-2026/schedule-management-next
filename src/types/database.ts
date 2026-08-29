@@ -46,3 +46,23 @@ export type MasterItem = {
   sort_order: number;
   active: boolean;
 };
+
+export type EmailRecipient = {
+  id: string;
+  name: string;
+  email: string;
+  active: boolean;
+  sort_order: number;
+};
+
+export type EmailGroup = {
+  id: string;
+  name: string;
+  active: boolean;
+  sort_order: number;
+};
+
+export type EmailGroupMember = {
+  group_id: string;
+  recipient_id: string;
+};
