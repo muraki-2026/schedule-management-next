@@ -149,7 +149,7 @@ export default function Home() {
       mark('type') + '予定区分：' + current.type,
       mark('place') + '場所：' + current.place,
       mark('memo') + 'メモ：' + current.memo,
-    ].join('\\n');
+    ].join('\n');
   }
   function selectedEmailRecipients(draft: DraftSchedule) {
     if (!draft.email_send) return [] as EmailRecipient[];
