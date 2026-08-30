@@ -163,8 +163,9 @@ export default function Home() {
   async function sendScheduleEmail(scheduleId: string | null, draft: DraftSchedule, saved: Partial<Schedule> & { title: string; schedule_date: string }, isUpdate = false, previous?: Schedule) {
     const recipients = selectedEmailRecipients(draft);
     if (!recipients.length) { setMessage('メール送信先が選択されていません。'); return; }
-    const subject = '【予定通知】' + saved.title;
-    const body = scheduleEmailText(saved);
+    const effectiveIsUpdate = Boolean(isUpdate || previous);
+    const subject = (effectiveIsUpdate ? '【予定更新通知】' : '【予定通知】') + saved.title;
+    const body = scheduleEmailText(saved, effectiveIsUpdate, previous);
     const res = await fetch('/api/send-schedule-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ recipients: recipients.map((r) => ({ name: r.name, email: r.email })), subject, text: body }) });
     const json = await res.json().catch(() => ({}));
     if (!res.ok) { setMessage(json.error || 'メール送信に失敗しました。'); return; }
