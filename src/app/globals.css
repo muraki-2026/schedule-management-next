@@ -20,6 +20,7 @@ button, input, select, textarea { font: inherit; }
 .event-line .event-time { flex: 0 0 auto; min-width: 2.35rem; overflow: visible; text-overflow: clip; }
 .event-line .event-assignee { flex: 0 0 auto; min-width: 5.4em; max-width: 5.4em; }
 .event-main { font-weight: 700; }
+.event-line .event-title { font-weight: 700; font-size: .75rem; }
 .event-sub { margin-top: .15rem; font-size: .68rem; opacity: .9; }
 .event.done { border-left-color: #16a34a; background: #dcfce7; }
 .event.cancelled { border-left-color: #dc2626; background: #fee2e2; }
