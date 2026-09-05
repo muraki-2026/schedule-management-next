@@ -292,7 +292,7 @@ function ScheduleBadge({ s, assignees, types, locations }: { s: Schedule; assign
   const assignee = assigneeName(s, assignees);
   const place = placeName(s, locations);
   const memo = s.memo || '';
-  return <span className={`event undefined`} style={{ background: scheduleColor(s, assignees, types) }}><span className="event-line event-main"><span className="event-time">{s.start_time?.slice(0,5) || '終日'}</span>{assignee && <span>【{assignee}】</span>}<span>{s.title}</span></span><span className="event-line event-sub">{type && <span>（{type}）</span>}{place && <span>{place}</span>}{memo && <span>{memo}</span>}</span></span>;
+  return <span className={`event undefined`} style={{ background: scheduleColor(s, assignees, types) }}><span className="event-line event-main"><span className="event-time">{s.start_time?.slice(0,5) || '終日'}</span>{assignee && <span className="event-assignee">【{assignee}】</span>}<span>{s.title}</span></span><span className="event-line event-sub">{type && <span>（{type}）</span>}{place && <span>{place}</span>}{memo && <span>{memo}</span>}</span></span>;
 }
 function TodayTomorrowPanel({ schedules, users, assignees, types, open }: { schedules: Schedule[]; users: UserProfile[]; assignees: MasterItem[]; types: MasterItem[]; open: (s: DraftSchedule) => void }) {
   const today = ymd(new Date());
