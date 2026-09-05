@@ -17,6 +17,7 @@ button, input, select, textarea { font: inherit; }
 .event { display: block; margin-top: .3rem; border-left: 4px solid #2563eb; background: #dbeafe; border-radius: 8px; padding: .3rem .4rem; font-size: .75rem; overflow: hidden; color: #111827; line-height: 1.25; }
 .event-line { display: flex; gap: .25rem; align-items: center; min-width: 0; }
 .event-line span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.event-line .event-time { flex: 0 0 auto; min-width: 2.9rem; overflow: visible; text-overflow: clip; }
 .event-main { font-weight: 700; }
 .event-sub { margin-top: .15rem; font-size: .68rem; opacity: .9; }
 .event.done { border-left-color: #16a34a; background: #dcfce7; }
