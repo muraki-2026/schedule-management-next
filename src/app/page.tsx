@@ -51,7 +51,7 @@ export default function Home() {
   const [emailRecipients, setEmailRecipients] = useState<EmailRecipient[]>([]);
   const [emailGroups, setEmailGroups] = useState<EmailGroup[]>([]);
   const [emailGroupMembers, setEmailGroupMembers] = useState<EmailGroupMember[]>([]);
-  const [calendarWidth, setCalendarWidth] = useState(1);
+  const [calendarWidth, setCalendarWidth] = useState(1.5);
 
   const currentUser = users.find((u) => u.id === sessionUserId) ?? users[0];
   const isAdmin = currentUser?.role === '管理者';
