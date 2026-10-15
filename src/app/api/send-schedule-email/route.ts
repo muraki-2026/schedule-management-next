@@ -1,19 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
 
 type Recipient = { name?: string; email: string };
 
 export async function POST(req: NextRequest) {
   try {
-    const host = process.env.SMTP_HOST;
-    const port = Number(process.env.SMTP_PORT || '465');
-    const secure = String(process.env.SMTP_SECURE ?? 'true').toLowerCase() === 'true';
-    const user = process.env.SMTP_USER;
-    const pass = process.env.SMTP_PASS;
-    const from = process.env.EMAIL_FROM || user;
-
-    if (!host || !port || !user || !pass || !from) {
-      return NextResponse.json({ error: 'SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS / EMAIL_FROM のいずれかが未設定です。' }, { status: 500 });
+    const apiKey = process.env.RESEND_API_KEY;
+    const from = process.env.EMAIL_FROM;
+    if (!apiKey || !from) {
+      return NextResponse.json({ error: 'RESEND_API_KEY または EMAIL_FROM が未設定です。' }, { status: 500 });
     }
 
     const body = await req.json() as {
@@ -26,27 +20,28 @@ export async function POST(req: NextRequest) {
     if (!recipients.length) return NextResponse.json({ error: '送信先がありません。' }, { status: 400 });
     if (!body.subject || !body.text) return NextResponse.json({ error: '件名または本文がありません。' }, { status: 400 });
 
-    const transporter = nodemailer.createTransport({
-      host,
-      port,
-      secure,
-      auth: { user, pass },
-    });
-
     const results = [];
     for (const recipient of recipients) {
       try {
-        const info = await transporter.sendMail({
-          from,
-          to: recipient.email,
-          subject: body.subject,
-          text: body.text,
+        const res = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from,
+            to: [recipient.email],
+            subject: body.subject,
+            text: body.text,
+          }),
         });
+        const data = await res.json().catch(() => ({}));
         results.push({
           recipient,
-          ok: true,
-          id: info.messageId,
-          error: null,
+          ok: res.ok,
+          id: data?.id ?? null,
+          error: res.ok ? null : JSON.stringify(data),
         });
       } catch (error) {
         results.push({
