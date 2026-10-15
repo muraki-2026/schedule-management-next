@@ -169,14 +169,33 @@ export default function Home() {
     const effectiveIsUpdate = Boolean(isUpdate || previous);
     const subject = (effectiveIsUpdate ? '【予定更新通知】' : '【予定通知】') + saved.title;
     const body = scheduleEmailText(saved, effectiveIsUpdate, previous);
-    const res = await fetch('/api/send-schedule-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ recipients: recipients.map((r) => ({ name: r.name, email: r.email })), subject, text: body }) });
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok) { setMessage(json.error || 'メール送信に失敗しました。'); return; }
-    if (supabase) {
-      const logs = (json.results ?? []).map((x: { recipient: EmailRecipient; ok: boolean; error?: string }) => ({ schedule_id: scheduleId, recipient_name: x.recipient?.name, recipient_email: x.recipient?.email, subject, body, status: x.ok ? 'sent' : 'error', error_message: x.error || null, sent_at: x.ok ? new Date().toISOString() : null }));
-      if (logs.length) await supabase.from('schedule_email_logs').insert(logs);
+    let json: { results?: { recipient: EmailRecipient; ok: boolean; id?: string | null; error?: string | null }[]; error?: string } = {};
+    try {
+      const res = await fetch('/api/send-schedule-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ recipients: recipients.map((r) => ({ name: r.name, email: r.email })), subject, text: body }) });
+      json = await res.json().catch(() => ({}));
+      if (!res.ok) { setMessage('メール送信APIエラー: ' + (json.error || res.status)); return; }
+    } catch (error) {
+      setMessage('メール送信API呼び出しに失敗しました: ' + (error instanceof Error ? error.message : String(error)));
+      return;
     }
-    setMessage('予定を保存し、メール送信処理を実行しました。');
+    const results = json.results ?? [];
+    const successCount = results.filter((x) => x.ok).length;
+    const failureResults = results.filter((x) => !x.ok);
+    const failureCount = failureResults.length;
+    let logMessage = '';
+    if (supabase) {
+      const logs = results.map((x) => ({ schedule_id: scheduleId, recipient_name: x.recipient?.name, recipient_email: x.recipient?.email, subject, body, status: x.ok ? 'sent' : 'error', error_message: x.error || null, sent_at: x.ok ? new Date().toISOString() : null }));
+      if (logs.length) {
+        const { error: logError } = await supabase.from('schedule_email_logs').insert(logs);
+        if (logError) logMessage = ' / ログ保存エラー: ' + logError.message;
+      }
+    }
+    if (failureCount > 0) {
+      const firstError = failureResults[0]?.error ? ' / 最初のエラー: ' + failureResults[0].error : '';
+      setMessage('メール送信結果: 成功 ' + successCount + '件 / 失敗 ' + failureCount + '件' + firstError + logMessage);
+    } else {
+      setMessage('メール送信結果: 成功 ' + successCount + '件 / 失敗 0件' + logMessage);
+    }
   }
   async function deleteSchedule(id: string) { if (!confirm('この予定を削除しますか？')) return; if (!supabase) setSchedules((v) => v.filter((s) => s.id !== id)); else { const { error } = await supabase.from('schedules').delete().eq('id', id); if (error) setMessage(error.message); } setDraft(null); await loadData(); }
 
