@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/supabase-js": "latest",
     "next": "latest",
+    "nodemailer": "^10.1.1",
     "react": "latest",
     "react-dom": "latest"
   },
@@ -18,6 +19,7 @@
     "@eslint/eslintrc": "latest",
     "@tailwindcss/postcss": "latest",
     "@types/node": "latest",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "eslint": "latest",
